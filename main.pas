@@ -100,10 +100,11 @@ begin
     case termina of
         1:
             writeln('Egalitate :|');
-        2:
-            writeln('Ai castigat :D!');
-        3:
-            writeln('Ai pierdut :(');
+        else:
+            if (termina-2=(x_o+turn+1)mod 2)
+                writeln('Ai castigat :D!')
+            else
+                writeln('Ai pierdut :(');
     end;
 end;
 
