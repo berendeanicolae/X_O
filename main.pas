@@ -33,11 +33,19 @@ procedure fill(x, y, x_o : integer; var a : mat);
 begin
     case x_o of
         0 : begin
+                setcolor(3); //blue
                 line(a[x,y].x1+20, a[x,y].y1+20, a[x,y].x2-20, a[x,y].y2-20);
+                line(a[x,y].x1+21, a[x,y].y1+20, a[x,y].x2-19, a[x,y].y2-20);
+                line(a[x,y].x1+19, a[x,y].y1+20, a[x,y].x2-21, a[x,y].y2-20);
                 line(a[x,y].x2-20, a[x,y].y1+20, a[x,y].x1+20, a[x,y].y2-20);
+                line(a[x,y].x2-19, a[x,y].y1+20, a[x,y].x1+21, a[x,y].y2-20);
+                line(a[x,y].x2-21, a[x,y].y1+20, a[x,y].x1+19, a[x,y].y2-20);
             end;
-        1:
-            circle((a[x,y].x1+a[x,y].x2)div 2, (a[x,y].y1+a[x,y].y2)div 2, (a[x,y].x2-a[x,y].x1)div 2-20);
+        1: begin
+                setcolor(40); //red
+                circle((a[x,y].x1+a[x,y].x2)div 2, (a[x,y].y1+a[x,y].y2)div 2, (a[x,y].x2-a[x,y].x1)div 2-20);
+                circle((a[x,y].x1+a[x,y].x2)div 2, (a[x,y].y1+a[x,y].y2)div 2, (a[x,y].x2-a[x,y].x1)div 2-19);
+           end;
     end;
     a[x,y].value:=x_o+1;
 end;
@@ -48,6 +56,7 @@ var termina : integer;
 begin
     termina:=0;
     c:=0;
+    setcolor(white);
 
     for i:=1 to 3 do
         for j:=1 to 3 do
@@ -58,19 +67,31 @@ begin
         c:=0;
         for j:=1 to 3 do
             if a[i,j].value=a[i,1].value then c:=c+1;
-        if (a[i,1].value<>0) and (c=3) then termina:=a[i,1].value+1;
+        if (a[i,1].value<>0) and (c=3) then begin
+            termina:=a[i,1].value+1;
+            line(a[i,1].x1+20, (a[i,1].y1+a[i,1].y2)div 2, a[i,3].x2-20, (a[i,3].y1+a[i,3].y2)div 2);
+        end;
     end;
 
     for j:=1 to 3 do begin
         c:=0;
         for i:=1 to 3 do
             if a[i,j].value=a[1,j].value then c:=c+1;
-        if (a[1,j].value<>0) and (c=3) then termina:=a[1,j].value+1;
+        if (a[1,j].value<>0) and (c=3) then begin
+            termina:=a[1,j].value+1;
+            line((a[1,j].x1+a[1,j].x2)div 2, a[1,j].y1+20, (a[3,j].x1+a[3,j].x2)div 2, a[3,j].y2-20);
+        end;
     end;
-    
-    if (a[1,1].value<>0) and (a[1,1].value=a[2,2].value) and (a[2,2].value=a[3,3].value) then termina:=a[1,1].value+1;
-    if (a[1,3].value<>0) and (a[1,3].value=a[2,2].value) and (a[2,2].value=a[3,1].value) then termina:=a[1,3].value+1;
-    
+
+    if (a[1,1].value<>0) and (a[1,1].value=a[2,2].value) and (a[2,2].value=a[3,3].value) then begin
+        termina:=a[1,1].value+1;
+        line(a[1,1].x1+23, a[1,1].y1+20, a[3,3].x2-17, a[3,3].y2-20);
+        end;
+    if (a[1,3].value<>0) and (a[1,3].value=a[2,2].value) and (a[2,2].value=a[3,1].value) then begin
+        termina:=a[1,3].value+1;
+        line(a[1,3].x2-23, a[1,1].y1+20, a[3,1].x1+17, a[3,3].y2-20);
+        end;
+
     joc_terminat:=termina;
 end;
 
@@ -96,16 +117,17 @@ begin
         turn:=1-turn;
         x_o:=1-x_o;
     end;
-    
+
     case termina of
         1:
             writeln('Egalitate :|');
-        else:
-            if (termina-2=(x_o+turn+1)mod 2)
+        else
+            if termina-2=(x_o+turn+1)mod 2 then
                 writeln('Ai castigat :D!')
             else
                 writeln('Ai pierdut :(');
     end;
+    sleep(2500);
 end;
 
 procedure init(tip : integer);
@@ -115,7 +137,7 @@ var gd, gm, i, j : integer;
              ((x1:0; x2:0; y1:0; y2:0; value:0), (x1:0; x2:0; y1:0; y2:0; value:0), (x1:0; x2:0; y1:0; y2:0; value:0)),
              ((x1:0; x2:0; y1:0; y2:0; value:0), (x1:0; x2:0; y1:0; y2:0; value:0), (x1:0; x2:0; y1:0; y2:0; value:0)));
 begin
-    gd:=9;
+    gd:=15; //9
     gm:=2;
 
     initgraph(gd, gm, GetCurrentDir);
